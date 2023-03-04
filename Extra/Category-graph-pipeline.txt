@@ -1,0 +1,40 @@
+[
+  {
+    '$match': {
+      'parentId': {
+        '$exists': false
+      }
+    }
+  }, {
+    '$graphLookup': {
+      'from': 'categories', 
+      'startWith': '$_id', 
+      'connectFromField': '_id', 
+      'connectToField': 'parentId', 
+      'as': 'children', 
+      'depthField': 'depth', 
+      'restrictSearchWithMatch': {
+        'isDeleted': false
+      }
+    }
+  }, {
+    '$unwind': {
+      'path': '$children'
+    }
+  }, {
+    '$sort': {
+      'depth': 1, 
+      'children.createdAt': 1
+    }
+  }, {
+    '$group': {
+      '_id': '$_id', 
+      'categoryName': {
+        '$first': '$categoryName'
+      }, 
+      'children': {
+        '$push': '$children'
+      }
+    }
+  }
+]
