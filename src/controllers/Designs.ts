@@ -43,7 +43,6 @@ class Designs {
         imageArray.push(await downloadImage(i.productImage));
       }
       console.log("imageArray", imageArray, req.file);
-
       const response: any = await openai.createImageVariation(
         // imageArray[0],
         req.file,
