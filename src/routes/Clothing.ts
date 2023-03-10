@@ -4,7 +4,7 @@ import { uploadData } from "../middlewares/uploadData";
 import uploadFile from "../middlewares/uploadFile";
 import middlewares from "../middlewares";
 import multer from "multer";
-const upload = multer({ dest: "./uploads/" });
+const upload = multer();
 const router = Router();
 export default (app: Router) => {
   app.use("/clothes", router);
@@ -15,7 +15,8 @@ export default (app: Router) => {
   );
   router.post(
     "/add",
-    //    middlewares.isAuth,
+    upload.single("productImage"),
+    middlewares.uploadPixelBin,
     controllers.Clothes.AddClothes
   );
   router.post("/check", controllers.Clothes.check);
