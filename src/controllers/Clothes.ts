@@ -40,7 +40,7 @@ class Clothing {
   }
   async lookout(req: Request, res: any) {
     try {
-      let findId = {};
+      let findId :any= {};
       Object.assign(findId, { _id: req.params.id });
       await clothesModel.updateOne(findId, {
         $inc: { "intervalAnalysis.views": 1 },

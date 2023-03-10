@@ -13,11 +13,11 @@
 //   return response;
 // }
 
-const { Configuration, OpenAIApi } = require("openai");
 
+import { Configuration, OpenAIApi } from 'openai'
 const configuration = new Configuration({
   organization: "org-39jOEbNOmJMtFfMxtzKRFBA7",
-  apiKey: "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",
+  apiKey: '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',
 });
 const openai = new OpenAIApi(configuration);
 

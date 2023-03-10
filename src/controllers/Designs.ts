@@ -33,22 +33,32 @@ class Designs {
             productName: 1,
             productImage: 1,
             description: 1,
+            intervalAnalysis:1
           },
         },
         { $limit: 5 },
       ]);
       let imageArray = [];
       for (let i of clothes) {
-        console.log("mark", i.productImage, `${i.productName}.png`);
-        imageArray.push(await downloadImage(i.productImage));
+        // console.log("mark", i.productImage, `${i.productName}.png`);
+        let thiss:any  = await downloadImage(i.productImage)
+        imageArray.push({
+          originalname:i.productName,
+          fieldname: i.productName,
+          encoding: '7bit',
+          mimetype: thiss.contentType,
+          Buffer: thiss.data
+      });
       }
-      console.log("imageArray", imageArray, req.file);
+      console.log("imageArray", req.file);
       const response: any = await openai.createImageVariation(
         // imageArray[0],
         req.file,
         1,
         "512x512"
       );
+      console.log(response);
+      
       const image_url: any = response.data.data[0].url;
       return res.success.success("Success", { clothes, image_url });
     } catch (error) {

@@ -13,5 +13,22 @@
       "internalConsoleOptions": "neverOpen",
       "outputCapture": "std"
     }
+    ,{ 
+      "name": "Launch ./src/index.ts", 
+      "type": "node", 
+      "program": "./index.ts", 
+      "stopOnEntry": true, 
+      "args": [], 
+      "cwd": ".", 
+      "runtimeExecutable": null, 
+      "envFile": "${workspaceFolder}/.env",
+  }, 
+  {
+      "name": "Attach",
+      "type": "node", 
+      "address": "localhost", 
+      "port": 5858
+  }
+
   ]
 }

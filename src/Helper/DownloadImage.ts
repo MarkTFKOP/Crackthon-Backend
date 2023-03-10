@@ -49,8 +49,8 @@ export default function downloadImage(url: any) {
           resolve(object);
         });
       })
-      .on("error", (error: any) => {
-        reject(error);
-      });
+      // .on("error", (error: any) => {
+      //   reject(error);
+      // });
   });
 }
