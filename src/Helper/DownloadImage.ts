@@ -25,11 +25,10 @@
 //     })
 //     .end();
 // }
-
-const http = require("http");
-const https = require("https");
-const fs = require("fs");
-
+  
+import http from "http";
+import https from "https";
+import fs from "fs";
 export default function downloadImage(url: any) {
   return new Promise((resolve: any, reject: any) => {
     const protocol = url.startsWith("https") ? https : http;

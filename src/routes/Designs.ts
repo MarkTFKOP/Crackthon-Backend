@@ -22,6 +22,6 @@ export default (app: Router) => {
     middlewares.uploadPixelBin,
     controllers.Designs.imageUpload
   );
-  router.post("/generateDesignsOnEvent");
+  router.post("/generateDesignsWithOpenAI",controllers.Designs.generateDesignsWithOpenAI);
   return router;
 };

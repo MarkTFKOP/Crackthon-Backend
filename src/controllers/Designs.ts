@@ -33,36 +33,32 @@ class Designs {
             productName: 1,
             productImage: 1,
             description: 1,
-            intervalAnalysis:1
+            // intervalAnalysis:1
           },
         },
         { $limit: 5 },
       ]);
-      let imageArray = [];
-      for (let i of clothes) {
-        // console.log("mark", i.productImage, `${i.productName}.png`);
-        let thiss:any  = await downloadImage(i.productImage)
+      const imageArray :any= [];
+      for (const i of clothes) { 
+        const imageHolder:any  = await downloadImage(i.productImage)
         imageArray.push({
           originalname:i.productName,
           fieldname: i.productName,
           encoding: '7bit',
-          mimetype: thiss.contentType,
-          Buffer: thiss.data
+          mimetype: imageHolder.contentType,
+          Buffer: imageHolder.data
       });
-      }
-      console.log("imageArray", req.file);
-      const response: any = await openai.createImageVariation(
-        // imageArray[0],
-        req.file,
-        1,
-        "512x512"
-      );
-      console.log(response);
-      
-      const image_url: any = response.data.data[0].url;
-      return res.success.success("Success", { clothes, image_url });
-    } catch (error) {
-      //   console.log(error);
+      } 
+      const response = await openai.createImageVariation({
+       image :req.file,
+       n: 1,
+       size: "512x512"
+      }).catch((e)=>{console.log(e);
+      });
+       
+      // const image_url: any = response.data;
+      return res.success.success("Success", { clothes,  });
+    } catch (error) { 
       return res.error.ServerError("Something went wrong", error);
     }
   }
@@ -70,6 +66,33 @@ class Designs {
     try {
       await getPixelBinData();
       return res.success.success("Success");
+    } catch (error) {
+      console.log(error);
+      return res.error.ServerError("Something went wrong");
+    }
+  }
+  async generateDesignsWithOpenAI(req: Request, res: any) {
+    try {
+      const {Text} = req.body;
+      console.log(Text);
+      const completion = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: Text,
+      });
+      console.log(completion.data);
+      const data:any = completion.data.choices[0].text?.replace('\n\n','')
+
+      const response = await openai.createImage({
+        prompt: data,
+        n: 1,
+        size: "1024x1024",
+      });
+      const image_url:any = response.data.data[0].url;
+      return res.success.success("Success",{
+        Text:Text,
+        prompt: data,
+        image :image_url
+      });
     } catch (error) {
       console.log(error);
       return res.error.ServerError("Something went wrong");
@@ -87,3 +110,33 @@ class Designs {
   }
 }
 export default new Designs();
+
+
+
+
+// const response = await openai.createImageVariation(
+      //   imageArray[0],
+      //   1,
+      //   "512x512"
+      // );
+      // console.log(response);
+
+
+
+      // let token:string 
+      //   = process.env.OPENAI_API_KEY ||"";
+      //   const data:any = {
+      //       image: imageArray[0], 
+      //       "n": 1,
+      //       "size": "512x512" 
+      //   }
+      //   const response:any = await axios.post("https://api.openai.com/v1/images/variations",
+      //   data,
+      //    { headers: 
+      //       {
+      //           "Authorization" : `Bearer ${token}`,
+      //           "Content-Type": 'multipart/form-data'} 
+      //         }
+      //         ).catch((e)=>{console.log(e.response,"cathc");
+      //         }); 
+      // const image_url: any = response.data;

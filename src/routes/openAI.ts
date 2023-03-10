@@ -11,5 +11,6 @@ export default (app: Router) => {
   app.use("/openAI", router);
   router.post("/getDesigns");
   router.post("/gptText", controllers.OpenAI.generateText); 
+  router.post("/testing", upload.single("images"), controllers.OpenAI.testing); 
   return router;
 };
